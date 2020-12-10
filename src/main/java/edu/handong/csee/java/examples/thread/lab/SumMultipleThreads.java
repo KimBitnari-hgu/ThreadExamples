@@ -9,6 +9,7 @@ public class SumMultipleThreads {
 		long to = 10000000;
 		ArrayList<SumRunner> sumRunners = new ArrayList<SumRunner>();
 		ArrayList<Thread> threadsForSubSum = new ArrayList<Thread>();
+		Thread thread = new Thread();
 
 		/* Let a thread compute a sub-sum.
 		 * sumRunners.add(new SumMultipleThreads(1,1000000));
@@ -25,10 +26,19 @@ public class SumMultipleThreads {
 			SumRunner currentRunner = new SumRunner((i*1000000)+1, (i+1)*1000000);
 			sumRunners.add(currentRunner);
 			
-			Thread thread = new Thread(currentRunner);
+			thread = new Thread(currentRunner);
 			thread.start();
 			threadsForSubSum.add(thread);
 			System.out.println("Thread-" + i + " started!");
+		}
+		
+		while(thread.isAlive()) {
+			try {
+				thread.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		long grandTotal = 0;
